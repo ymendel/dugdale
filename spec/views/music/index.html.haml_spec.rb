@@ -38,6 +38,16 @@ describe '/music/index' do
       end
     end
     
+    it 'should link to the path part of the track' do
+      template.stubs(:path_part).with(@track).returns('path_part')
+      do_render
+      response.should have_tag('ul[id=?]', 'track_listing') do
+        with_tag('li') do
+          with_tag('a[href=?]', '/music/show/path_part')
+        end
+      end
+    end
+    
     it 'should have an item for each track' do
       @tracks = ['track one', 'track two']
       display_names = []
