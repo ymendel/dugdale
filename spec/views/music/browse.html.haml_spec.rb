@@ -38,12 +38,12 @@ describe '/music/index' do
       end
     end
     
-    it 'should link to the path part of the track' do
-      template.stubs(:path_part).with(@track).returns('path_part')
+    it 'should link to the view link of the track' do
+      template.stubs(:view_link).with(@track).returns('view_link')
       do_render
       response.should have_tag('ul[id=?]', 'track_listing') do
         with_tag('li') do
-          with_tag('a[href=?]', '/music/show/path_part')
+          with_tag('a[href=?]', 'view_link')
         end
       end
     end

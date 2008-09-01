@@ -14,4 +14,14 @@ module MusicHelper
     part.sub!(%r%^#{Regexp.escape(Track.root)}/%, '')
     part
   end
+  
+  def view_link(path)
+    action = 'browse'
+    if path.is_a?(Track)
+      action = 'show'
+      path = path.path
+    end
+    
+    "/music/#{action}/#{path}"
+  end
 end

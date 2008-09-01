@@ -92,4 +92,31 @@ describe MusicHelper do
       helper.path_part(track).should == path
     end
   end
+  
+  it 'should give a view link for a track' do
+    helper.should respond_to(:view_link)
+  end
+  
+  describe 'view link' do
+    it 'should accept an argument' do
+      lambda { helper.view_link('filename') }.should_not raise_error(ArgumentError)
+    end
+    
+    it 'should require an argument' do
+      lambda { helper.view_link }.should raise_error(ArgumentError)
+    end
+    
+    it 'should link to browsing if the argument is a plain string' do
+      path = 'filename'
+      helper.view_link(path).should == "/music/browse/#{path}"
+    end
+    
+    it 'should link to showing if the argument is a Track object' do
+      path = 'filename'
+      track = stub('track', :path => path)
+      track.stubs(:is_a?).with(Track).returns(true)
+      helper.view_link(track).should == "/music/show/#{path}"
+    end
+  end
+  
 end

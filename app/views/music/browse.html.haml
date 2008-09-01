@@ -3,6 +3,6 @@
     - if elem.is_a?(Array)
       %ul
         - elem.each do |track|
-          %li= link_to(display_name(track), "/music/show/#{path_part(track)}")
+          %li= link_to(display_name(track), view_link(track))
     - else
-      %li= link_to(display_name(elem), "/music/show/#{path_part(elem)}")
+      %li= link_to(display_name(elem), view_link(elem))
