@@ -42,6 +42,7 @@ describe Track do
     before :each do
       @path = 'path/to/file'
       File.stubs(:file?).returns(true)
+      Mp3Info.stubs(:new)
     end
     
     it 'should accept a path' do
@@ -65,6 +66,17 @@ describe Track do
       it 'should not error' do
         lambda { Track.new(@path) }.should_not raise_error
       end
+      
+      it 'should get mp3 info for the file' do
+        Mp3Info.expects(:new).with("#{Track.root}/#{@path}")
+        Track.new(@path)
+      end
+      
+      it 'should store the mp3 info' do
+        mp3 = stub('mp3')
+        Mp3Info.stubs(:new).returns(mp3)
+        Track.new(@path).mp3_info.should == mp3
+      end
     end
     
     describe 'when the path does not point to a file' do
@@ -75,6 +87,14 @@ describe Track do
       it 'should error' do
         lambda { Track.new(@path) }.should raise_error
       end
+      
+      it 'should not get mp3 info for the file' do
+        Mp3Info.expects(:new).never
+        begin
+          Track.new(@path)
+        rescue
+        end
+      end
     end
     
     it 'should store the path' do
@@ -83,6 +103,40 @@ describe Track do
     
     it 'should give a full path' do
       Track.new(@path).full_path.should == "#{Track.root}/#{@path}"
+    end
+  end
+  
+  describe 'getting info' do
+    before :each do
+      @mp3_tag = stub('mp3 tag')
+      mp3_info = stub('mp3 info', :tag => @mp3_tag)
+      Mp3Info.stubs(:new).returns(mp3_info)
+      File.stubs(:file?).returns(true)
+      @track = Track.new('some/path')
+    end
+    
+    it 'should delegate title to the MP3 info' do
+      title = 'some title'
+      @mp3_tag.stubs(:title).returns(title)
+      @track.title.should == title
+    end
+    
+    it 'should delegate artist to the MP3 info' do
+      artist = 'some artist'
+      @mp3_tag.stubs(:artist).returns(artist)
+      @track.artist.should == artist
+    end
+    
+    it 'should delegate album to the MP3 info' do
+      album = 'some album'
+      @mp3_tag.stubs(:album).returns(album)
+      @track.album.should == album
+    end
+    
+    it 'should delegate comments to the MP3 info' do
+      comments = 'comments go here'
+      @mp3_tag.stubs(:comments).returns(comments)
+      @track.comments.should == comments
     end
   end
 end
