@@ -1,3 +1,17 @@
 %h1= display_name(@track.path)
 
+%ul
+  %li
+    Title:
+    = @track.title
+  %li
+    Artist:
+    = @track.artist
+  %li
+    Album:
+    = @track.album
+  %li
+    Comments:
+    = @track.comments
+
 = link_to 'index', '/music'
