@@ -6,26 +6,9 @@ describe MusicController do
       get :index
     end
     
-    it 'should be successful' do
+    it 'should redirect to browse' do
       do_get
-      response.should be_success
-    end
-    
-    it 'should get a track listing' do
-      Track.expects(:list)
-      do_get
-    end
-    
-    it 'should make the track listing available to the view' do
-      tracks = stub('tracks')
-      Track.stubs(:list).returns(tracks)
-      do_get
-      assigns[:tracks].should == tracks
-    end
-    
-    it 'should render the index template' do
-      do_get
-      response.should render_template('index')
+      response.should redirect_to(:action => :browse)
     end
   end
   

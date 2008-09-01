@@ -104,6 +104,17 @@ describe Track do
         Track.tree(@path).should == ['one', 'dir', path_list, 'two', 'three']
       end
       
+      it 'should not try to get path contents if no path given' do
+        Track.expects(:list).once
+        Track.tree
+      end
+      
+      it 'should return only the top-level contents if no path given' do
+        top_list = %w[ one dir two three ]
+        Track.stubs(:list).returns(top_list)
+        Track.tree.should == top_list
+      end
+      
       it 'should return only the top-level contents if the path contents are empty' do
         top_list = %w[ one dir two three ]
         Track.stubs(:list).returns(top_list)

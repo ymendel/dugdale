@@ -1,6 +1,6 @@
 class MusicController < ApplicationController
   def index
-    @tracks = Track.list
+    redirect_to :action => :browse
   end
   
   def show

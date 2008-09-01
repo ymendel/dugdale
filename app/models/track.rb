@@ -18,8 +18,10 @@ class Track
     end
     
     def tree(path = nil)
-      path_list = list(path)
       result = list
+      return result unless path
+      
+      path_list = list(path)        
       if path_index = result.collect { |x|  x.sub(%r%^#{Regexp.escape(Track.root)}/%, '') }.index(path)
         result[path_index+1, 0] = [path_list]
       end
