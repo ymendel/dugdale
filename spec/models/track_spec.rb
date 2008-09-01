@@ -49,6 +49,67 @@ describe Track do
         Track.list('/this/path/should/not/exist').should == []
       end
     end
+    
+    it 'should return a tree of music' do
+      Track.should respond_to(:tree)
+    end
+    
+    describe 'when returning a tree' do
+      before :each do
+        @path = 'dir'
+        Track.stubs(:list).returns([])
+      end
+      
+      it 'should accept a path' do
+        lambda { Track.tree('path') }.should_not raise_error(ArgumentError)
+      end
+      
+      it 'should not require a path' do
+        lambda { Track.tree }.should_not raise_error(ArgumentError)
+      end
+      
+      it 'should get the top-level list' do
+        Track.expects(:list).with { |*args|  args.length.zero? }.returns([])
+        Track.tree(@path)
+      end
+      
+      it 'should get the list for the given path' do
+        Track.expects(:list).with(@path).returns([])
+        Track.tree(@path)
+      end
+      
+      it 'should return the path contents nested in the top-level contents' do
+        top_list = %w[ one dir two three ]
+        Track.stubs(:list).returns(top_list)
+        path_list = %w[ five six seven ]
+        Track.stubs(:list).with(@path).returns(path_list)
+        Track.tree(@path).should == ['one', 'dir', path_list, 'two', 'three']
+      end
+      
+      it 'should return only the top-level contents if the path contents are empty' do
+        top_list = %w[ one dir two three ]
+        Track.stubs(:list).returns(top_list)
+        path_list = []
+        Track.stubs(:list).with(@path).returns(path_list)
+        Track.tree(@path).should == top_list
+      end
+      
+      it 'should return only the top-level contents if the path does not appear in those contents' do
+        top_list = %w[ one two three ]
+        Track.stubs(:list).returns(top_list)
+        path_list = %w[ five six seven ]
+        Track.stubs(:list).with(@path).returns(path_list)
+        Track.tree(@path).should == top_list
+      end
+      
+      it 'should return the path contents nested in the top-level contents, taking the root path into account' do
+        top_list = ['one', "#{Track.root}/dir", 'two', 'three' ]
+        Track.stubs(:list).returns(top_list)
+        path_list = %w[ five six seven ]
+        Track.stubs(:list).with(@path).returns(path_list)
+        Track.tree(@path).should == ['one', "#{Track.root}/dir", path_list, 'two', 'three']
+      end
+    end
   end
   
   describe 'when initialized' do

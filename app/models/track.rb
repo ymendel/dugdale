@@ -9,6 +9,15 @@ class Track
     def list(path = '')
       Dir[File.join(root, path, '*')]
     end
+    
+    def tree(path = nil)
+      path_list = list(path)
+      result = list
+      if path_index = result.collect { |x|  x.sub(%r%^#{Regexp.escape(Track.root)}/%, '') }.index(path)
+        result[path_index+1, 0] = [path_list]
+      end
+      result
+    end
   end
   
   attr_reader :path
