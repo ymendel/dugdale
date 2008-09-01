@@ -46,4 +46,21 @@ describe MusicController, 'routing' do
     pending 'figuring out what to do about the /s'
     route_for(:controller => 'music', :action => 'show', :path => 'path/to/filename.mp3').should == '/music/show/path/to/filename.mp3'
   end
+  
+  it "should build params :action => 'browse', :path => 'dir' from GET /music/browse/dir" do
+    params_from(:get, '/music/browse/dir').should == { :controller => 'music', :action => 'browse', :path => 'dir' }
+  end
+  
+  it "should build params :action => 'browse', :path => 'path/to/dir' from GET /music/browse/path/to/dir" do
+    params_from(:get, '/music/browse/path/to/dir').should == { :controller => 'music', :action => 'browse', :path => 'path/to/dir' }
+  end
+  
+  it "should map :action => 'browse', :path => 'dir' to /music/browse/dir" do
+    route_for(:controller => 'music', :action => 'browse', :path => 'dir').should == '/music/browse/dir'
+  end
+  
+  it "should map :action => 'browse', :path => 'path/to/dir to /music/browse/path/to/dir" do
+    pending 'figuring out what to do about the /s'
+    route_for(:controller => 'music', :action => 'browse', :path => 'path/to/dir').should == '/music/browse/path/to/dir'
+  end
 end

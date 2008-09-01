@@ -60,4 +60,36 @@ describe MusicController do
       response.should render_template('show')
     end
   end
+  
+  describe 'GET /music/browse/path' do
+    before :each do
+      @path = 'dir'
+      @tree = stub('tree')
+      Track.stubs(:tree).returns(@tree)
+    end
+    
+    def do_get
+      get :browse, :path => @path
+    end
+    
+    it 'should be successful' do
+      do_get
+      response.should be_success
+    end
+    
+    it 'should get a tree for the given path' do
+      Track.expects(:tree).with(@path)
+      do_get
+    end
+    
+    it 'should make the tree available to the view' do
+      do_get
+      assigns[:tracks].should == @tree
+    end
+    
+    it 'should render the browse template' do
+      do_get
+      response.should render_template('browse')
+    end
+  end  
 end
