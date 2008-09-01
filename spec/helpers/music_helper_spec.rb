@@ -52,6 +52,13 @@ describe MusicHelper do
       helper.display_name(arg)
       arg.should == old_arg
     end
+    
+    it 'should work with a Track object' do
+      path = '01 filename.mp3'
+      track = stub('track', :path => path)
+      track.stubs(:is_a?).with(Track).returns(true)
+      helper.display_name(track).should == 'filename'
+    end
   end
   
   it 'should give a path part for a track' do
@@ -76,6 +83,13 @@ describe MusicHelper do
       old_arg = arg.dup
       helper.path_part(arg)
       arg.should == old_arg
+    end
+    
+    it 'should work with a Track object' do
+      path = 'filename'
+      track = stub('track', :path => path)
+      track.stubs(:is_a?).with(Track).returns(true)
+      helper.path_part(track).should == path
     end
   end
 end
