@@ -8,4 +8,15 @@ class Track
       Dir["#{root}/*"]
     end
   end
+  
+  attr_reader :path
+  
+  def initialize(path)
+    @path = path
+    raise unless File.file?(full_path)
+  end
+  
+  def full_path
+    "#{self.class.root}/#{path}"
+  end
 end

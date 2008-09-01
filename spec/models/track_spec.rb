@@ -37,4 +37,52 @@ describe Track do
       end
     end
   end
+  
+  describe 'when initialized' do
+    before :each do
+      @path = 'path/to/file'
+      File.stubs(:file?).returns(true)
+    end
+    
+    it 'should accept a path' do
+      lambda { Track.new(@path) }.should_not raise_error(ArgumentError)
+    end
+    
+    it 'should require a path' do
+      lambda { Track.new }.should raise_error(ArgumentError)
+    end
+    
+    it 'should check if the path points to a file' do
+      File.expects(:file?).with("#{Track.root}/#{@path}").returns(true)
+      Track.new(@path)
+    end
+    
+    describe 'when the path points to a file' do
+      before :each do
+        File.stubs(:file?).returns(true)
+      end
+      
+      it 'should not error' do
+        lambda { Track.new(@path) }.should_not raise_error
+      end
+    end
+    
+    describe 'when the path does not point to a file' do
+      before :each do
+        File.stubs(:file?).returns(false)
+      end
+      
+      it 'should error' do
+        lambda { Track.new(@path) }.should raise_error
+      end
+    end
+    
+    it 'should store the path' do
+      Track.new(@path).path.should == @path
+    end
+    
+    it 'should give a full path' do
+      Track.new(@path).full_path.should == "#{Track.root}/#{@path}"
+    end
+  end
 end
