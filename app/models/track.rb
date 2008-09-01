@@ -6,8 +6,8 @@ class Track
       "#{RAILS_ROOT}/music"
     end
     
-    def list
-      Dir["#{root}/*"]
+    def list(path = '')
+      Dir[File.join(root, path, '*')]
     end
   end
   

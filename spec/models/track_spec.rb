@@ -15,12 +15,21 @@ describe Track do
     end
     
     describe 'when listing music' do
-      it 'should use the root music path' do
-        Track.expects(:root).returns('')
-        Track.list
+      it 'should accept a path' do
+        lambda { Track.list('path') }.should_not raise_error(ArgumentError)
       end
       
-      it 'should get a directory listing of the top-level music contents' do
+      it 'should not require a path' do
+        lambda { Track.list }.should_not raise_error(ArgumentError)
+      end
+      
+      it 'should get a directory listing of the given path' do
+        path = 'path/to/music'
+        Dir.expects(:[]).with("#{Track.root}/#{path}/*").returns([])
+        Track.list(path)
+      end
+      
+      it 'should get a directory listing of the top-level music contents if no path given' do
         Dir.expects(:[]).with("#{Track.root}/*").returns([])
         Track.list
       end
@@ -34,6 +43,10 @@ describe Track do
       it 'should return an empty list if the music root path does not exist' do
         Track.stubs(:root).returns('/this/path/should/not/exist')
         Track.list.should == []
+      end
+      
+      it 'should return an empty list if the given path does not exist' do
+        Track.list('/this/path/should/not/exist').should == []
       end
     end
   end
