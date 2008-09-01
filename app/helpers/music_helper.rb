@@ -1,7 +1,7 @@
 module MusicHelper
   def display_name(path)
-    display = path_part(path).dup
-    display.sub!(/\..*$/, '')
+    display = File.basename(path)
+    display.sub!(/\.[^.]+$/, '')
     display.tr!('_', ' ')
     display.sub!(/^\d+(\s*-\s*|\s+)/, '')
     display

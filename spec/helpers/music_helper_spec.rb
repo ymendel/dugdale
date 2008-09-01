@@ -18,8 +18,16 @@ describe MusicHelper do
       helper.display_name("#{Track.root}/filename").should == 'filename'
     end
     
+    it 'should remove any extra paths' do
+      helper.display_name("#{Track.root}/path/to/filename").should == 'filename'
+    end
+    
     it 'should remove the extension' do
       helper.display_name("#{Track.root}/filename.mp3").should == 'filename'
+    end
+    
+    it 'should not remove an ellipsis' do
+      helper.display_name("#{Track.root}/filename...").should == 'filename...'
     end
     
     it 'should remove a starting track number' do
