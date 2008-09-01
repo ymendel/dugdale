@@ -7,7 +7,14 @@ class Track
     end
     
     def list(path = '')
-      Dir[File.join(root, path, '*')]
+      Dir[File.join(root, path, '*')].collect do |elem|
+        relative = elem.sub(%r%^#{Regexp.escape(Track.root)}/%, '')
+        if File.file?(elem)
+          new(relative)
+        else
+          relative
+        end
+      end
     end
     
     def tree(path = nil)
@@ -26,7 +33,7 @@ class Track
   
   def initialize(path)
     @path = path
-    raise unless File.file?(full_path)
+    raise "#{full_path} is not a regular file" unless File.file?(full_path)
     @mp3_info = Mp3Info.new(full_path)
   end
   

@@ -15,6 +15,7 @@ describe Track do
     end
     
     describe 'when listing music' do
+      
       it 'should accept a path' do
         lambda { Track.list('path') }.should_not raise_error(ArgumentError)
       end
@@ -38,6 +39,23 @@ describe Track do
         @listing = ['file', 'other file']
         Dir.stubs(:[]).returns(@listing)
         Track.list.should == @listing
+      end
+      
+      it 'should remove the given path from the listings' do
+        @files = ['file', 'other file']
+        @listing = @files.collect { |x|  "#{Track.root}/#{x}" }
+        Dir.stubs(:[]).returns(@listing)
+        Track.list.should == @files
+      end
+      
+      it 'should return Track instances for the files in the directory listing' do
+        @listing = ['file', 'other file']
+        Dir.stubs(:[]).returns(@listing)
+        File.stubs(:file?).returns(false)
+        File.stubs(:file?).with('file').returns(true)
+        track = stub('track')
+        Track.stubs(:new).with('file').returns(track)
+        Track.list.should == [track, 'other file']
       end
       
       it 'should return an empty list if the music root path does not exist' do
