@@ -1,0 +1,8 @@
+%ul#track_listing
+  - @tracks.each do |elem|
+    - if elem.is_a?(Array)
+      %ul
+        - elem.each do |track|
+          %li= link_to(display_name(track), "/music/show/#{path_part(track)}")
+    - else
+      %li= link_to(display_name(elem), "/music/show/#{path_part(elem)}")
