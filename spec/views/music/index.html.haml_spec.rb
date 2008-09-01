@@ -24,20 +24,34 @@ describe '/music/index' do
       end
     end
     
-    it 'should have the track name in the item' do
+    it 'should get the display name for the track' do
+      template.expects(:display_name).with(@track)
+      do_render
+    end
+    
+    it 'should put the display name in the item' do
+      display_name = 'track display name'
+      template.stubs(:display_name).returns(display_name)
       do_render
       response.should have_tag('ul[id=?]', 'track_listing') do
-        with_tag('li', :text => @track)
+        with_tag('li', :text => display_name)
       end
     end
     
     it 'should have an item for each track' do
       @tracks = ['track one', 'track two']
+      display_names = []
+      @tracks.each do |track|
+        display_name = "track '#{track}' display name"
+        template.stubs(:display_name).with(track).returns(display_name)
+        display_names << display_name
+      end
       assigns[:tracks] = @tracks
+      
       do_render
       response.should have_tag('ul[id=?]', 'track_listing') do
-        @tracks.each do |track|
-          with_tag('li', :text => track)
+        @tracks.each_with_index do |track, i|
+          with_tag('li', :text => display_names[i])
         end
       end
     end
