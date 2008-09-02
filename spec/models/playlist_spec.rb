@@ -159,4 +159,49 @@ describe Playlist do
       @playlist.write
     end
   end
+  
+  it 'should allow appending' do
+    @playlist.should respond_to(:<<)
+  end
+  
+  describe 'appending' do
+    before :each do
+      @playlist.clear
+      @track = stub('track', :is_a? => false)
+      @track.stubs(:is_a?).with(Track).returns(true)
+    end
+    
+    it 'should add a track to the track list' do
+      @playlist << @track
+      @playlist.tracks.should == [@track]
+    end
+    
+    it 'should put the track at the end of the track list' do
+      @playlist.instance_variable_set('@tracks', [1,2,3])
+      @playlist << @track
+      @playlist.tracks.should == [1,2,3,@track]
+    end
+    
+    describe 'given a string instead of a track' do
+      before :each do
+        @path = 'some_file'
+        Track.stubs(:new).returns(@track)
+      end
+      
+      it 'should make a track object for the given path' do
+        Track.expects(:new).with(@path)
+        @playlist << @path
+      end
+      
+      it 'should strip the music root path from the beginning' do
+        Track.expects(:new).with(@path)
+        @playlist << "#{Track.root}/#{@path}"
+      end
+      
+      it 'should add the track object to its tracks' do
+        @playlist << @path
+        @playlist.tracks.last == @track
+      end
+    end
+  end
 end
