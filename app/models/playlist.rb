@@ -22,9 +22,7 @@ class Playlist
   def load
     @tracks = []
     contents = File.read(full_path)
-    contents.split("\n").each do |line|
-      @tracks << Track.new(line.sub(%r%^#{Track.root}/%, ''))
-    end
+    contents.split("\n").each { |line|  self << line }
   rescue Errno::ENOENT
   end
   
