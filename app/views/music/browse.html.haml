@@ -1,8 +1,2 @@
 %ul#track_listing
-  - @tracks.each do |elem|
-    - if elem.is_a?(Array)
-      %ul
-        - elem.each do |track|
-          %li= link_to(display_name(track), view_link(track))
-    - else
-      %li= link_to(display_name(elem), view_link(elem))
+  = render :partial => 'list', :locals => { :tracks => @tracks }

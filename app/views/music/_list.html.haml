@@ -1,0 +1,6 @@
+- tracks.each do |elem|
+  - if elem.is_a?(Array)
+    %ul
+      = render :partial => 'list', :locals => { :tracks => elem }
+  - else
+    = render :partial => 'item', :locals => { :track => elem }

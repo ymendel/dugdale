@@ -66,13 +66,25 @@ describe '/music/index' do
       end
     end
     
-    it "should make a nested list if there are nested tracks" do
+    it 'should make a nested list if there are nested tracks' do
       @tracks = ['track one', ['track two']]
       assigns[:tracks] = @tracks
       
       do_render
       response.should have_tag('ul[id=?]', 'track_listing') do
         with_tag('ul')
+      end
+    end
+    
+    it 'should make handle multiple levels of nesting' do
+      @tracks = ['track one', ['track two', ['track three']]]
+      assigns[:tracks] = @tracks
+      
+      do_render
+      response.should have_tag('ul[id=?]', 'track_listing') do
+        with_tag('ul') do
+          with_tag('ul')
+        end
       end
     end
     
