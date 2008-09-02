@@ -143,11 +143,11 @@ describe Track do
         path = 'sub/path'
         top_list  = %w[one sub two three]
         Track.stubs(:list).returns(top_list)
-        sub_list  = %w[five six path seven]
+        sub_list  = %w[five six sub/path seven]
         Track.stubs(:list).with('sub').returns(sub_list)
         path_list = %w[eight nine ten]
         Track.stubs(:list).with('sub/path').returns(path_list)
-        expected  = ['one', 'sub', ['five', 'six', 'path', ['eight', 'nine', 'ten'], 'seven'], 'two', 'three']
+        expected  = ['one', 'sub', ['five', 'six', 'sub/path', ['eight', 'nine', 'ten'], 'seven'], 'two', 'three']
         Track.tree(path).should == expected
       end
       
@@ -155,13 +155,13 @@ describe Track do
         path = 'path/to/dir'
         top_list  = %w[one path two three]
         Track.stubs(:list).returns(top_list)
-        path_list = %w[five six to seven]
+        path_list = %w[five six path/to seven]
         Track.stubs(:list).with('path').returns(path_list)
-        to_list   = %w[dir eight nine ten]
+        to_list   = %w[path/to/dir eight nine ten]
         Track.stubs(:list).with('path/to').returns(to_list)
         dir_list  = %w[eleven twelve]
         Track.stubs(:list).with('path/to/dir').returns(dir_list)
-        expected  = ['one', 'path', ['five', 'six', 'to', ['dir', ['eleven', 'twelve'], 'eight', 'nine', 'ten'], 'seven'], 'two', 'three']
+        expected  = ['one', 'path', ['five', 'six', 'path/to', ['path/to/dir', ['eleven', 'twelve'], 'eight', 'nine', 'ten'], 'seven'], 'two', 'three']
         Track.tree(path).should == expected
       end
     end

@@ -32,7 +32,7 @@ class Track
         result ||= sub_path_list
         
         sub_path_end = File.split(sub_path).last
-        if sub_path_index = path_list.collect { |x|  x.sub(%r%^#{Regexp.escape(Track.root)}/%, '') }.index(sub_path.split('/').last)
+        if sub_path_index = path_list.collect { |x|  x.sub(%r%^#{Regexp.escape(Track.root)}/%, '') }.index(sub_path)
           tmp = path_list.dup
           tmp[sub_path_index+1, 0] = [result]
           result = tmp
