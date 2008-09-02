@@ -138,6 +138,32 @@ describe Track do
         Track.stubs(:list).with(@path).returns(path_list)
         Track.tree(@path).should == ['one', "#{Track.root}/dir", path_list, 'two', 'three']
       end
+      
+      it 'should handle sub-paths' do
+        path = 'sub/path'
+        top_list  = %w[one sub two three]
+        Track.stubs(:list).returns(top_list)
+        sub_list  = %w[five six path seven]
+        Track.stubs(:list).with('sub').returns(sub_list)
+        path_list = %w[eight nine ten]
+        Track.stubs(:list).with('sub/path').returns(path_list)
+        expected  = ['one', 'sub', ['five', 'six', 'path', ['eight', 'nine', 'ten'], 'seven'], 'two', 'three']
+        Track.tree(path).should == expected
+      end
+      
+      it 'should handle sub-sub-paths' do
+        path = 'path/to/dir'
+        top_list  = %w[one path two three]
+        Track.stubs(:list).returns(top_list)
+        path_list = %w[five six to seven]
+        Track.stubs(:list).with('path').returns(path_list)
+        to_list   = %w[dir eight nine ten]
+        Track.stubs(:list).with('path/to').returns(to_list)
+        dir_list  = %w[eleven twelve]
+        Track.stubs(:list).with('path/to/dir').returns(dir_list)
+        expected  = ['one', 'path', ['five', 'six', 'to', ['dir', ['eleven', 'twelve'], 'eight', 'nine', 'ten'], 'seven'], 'two', 'three']
+        Track.tree(path).should == expected
+      end
     end
   end
   
