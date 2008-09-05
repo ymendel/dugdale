@@ -76,7 +76,7 @@ describe '/music/index' do
       end
     end
     
-    it 'should make handle multiple levels of nesting' do
+    it 'should handle multiple levels of nesting' do
       @tracks = ['track one', ['track two', ['track three']]]
       assigns[:tracks] = @tracks
       
