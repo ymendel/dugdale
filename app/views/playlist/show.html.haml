@@ -1,0 +1,5 @@
+%ol#track_listing
+  - @playlist.tracks.each do |track|
+    %li= link_to(display_name(track), "/music/show/#{path_part(track)}")
+
+= link_to 'music index', '/music'
