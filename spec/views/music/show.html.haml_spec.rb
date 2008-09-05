@@ -7,6 +7,7 @@ describe '/music/show' do
       :title => 'Awesome Track', :artist => 'King Awesome', :album => 'The Awesome Rides Again',
       :comments => 'Not really all that awesome.'
     )
+    @track.stubs(:is_a?).with(Track).returns(true)
     assigns[:track] = @track
   end
   
@@ -15,7 +16,7 @@ describe '/music/show' do
   end
   
   it 'should get the display name for the track' do
-    template.expects(:display_name).with(@path)
+    template.expects(:display_name).with(@track)
     do_render
   end
   
