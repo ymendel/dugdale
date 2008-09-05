@@ -81,4 +81,9 @@ describe '/playlist/show' do
     do_render
     response.should have_tag('a[href=?]', '/music')
   end
+  
+  it 'should link to clear the playlist' do
+    do_render
+    response.should have_tag('a[href=?]', '/playlist/clear')
+  end
 end

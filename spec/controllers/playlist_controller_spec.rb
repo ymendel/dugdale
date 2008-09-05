@@ -42,4 +42,31 @@ describe PlaylistController do
       response.should render_template('show')
     end
   end
+  
+  describe 'GET /playlist/clear' do
+    before :each do
+      @playlist = stub('playlist', :clear => nil)
+      Playlist.stubs(:new).returns(@playlist)
+    end
+    
+    def do_get
+      get :clear
+    end
+    
+    it 'should create a playlist instance' do
+      Playlist.expects(:new).returns(@playlist)
+      do_get
+    end
+    
+    it 'should clear the playlist' do
+      @playlist.expects(:clear)
+      do_get
+    end
+    
+    it 'should redirect to index' do
+      do_get
+      response.should redirect_to(:action => :index)
+    end
+  end
+  
 end

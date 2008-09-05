@@ -20,4 +20,12 @@ describe PlaylistController, 'routing' do
   it "should map :action => 'show' to /playlist/show" do
     route_for(:controller => 'playlist', :action => 'show').should == '/playlist/show'
   end
+  
+  it "should build params :action => 'clear', from GET /playlist/clear" do
+    params_from(:get, '/playlist/clear').should == { :controller => 'playlist', :action => 'clear' }
+  end
+  
+  it "should map :action => 'clear' to /playlist/clear" do
+    route_for(:controller => 'playlist', :action => 'clear').should == '/playlist/clear'
+  end
 end
