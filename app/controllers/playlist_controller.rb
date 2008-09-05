@@ -12,4 +12,11 @@ class PlaylistController < ApplicationController
     playlist.clear
     redirect_to :action => :index
   end
+  
+  def enqueue
+    playlist = Playlist.new
+    playlist << params[:path]
+    playlist.write
+    redirect_to :action => :show
+  end
 end

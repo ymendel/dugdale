@@ -51,4 +51,10 @@ describe '/music/show' do
     do_render
     response.should have_tag('a[href=?]', '/music')
   end
+  
+  it 'should have a link to enqueue the track' do
+    template.stubs(:path_part).with(@track).returns('path_part')
+    do_render
+    response.should have_tag('a[href=?]', '/playlist/enqueue/path_part')
+  end
 end

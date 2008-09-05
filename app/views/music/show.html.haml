@@ -15,3 +15,5 @@
     = @track.comments
 
 = link_to 'index', '/music'
+%br
+= link_to 'enqueue', "/playlist/enqueue/#{path_part(@track)}"

@@ -69,4 +69,35 @@ describe PlaylistController do
     end
   end
   
+  describe 'GET /playlist/enqueue/path' do
+    before :each do
+      @playlist = stub('playlist', :<< => nil, :write => nil)
+      Playlist.stubs(:new).returns(@playlist)
+      @path = 'some_path'
+    end
+    
+    def do_get
+      get :enqueue, :path => @path
+    end
+    
+    it 'should create a playlist instance' do
+      Playlist.expects(:new).returns(@playlist)
+      do_get
+    end
+    
+    it 'should enqueue the given path' do
+      @playlist.expects(:<<).with(@path)
+      do_get
+    end
+    
+    it 'should write the playlist' do
+      @playlist.expects(:write)
+      do_get
+    end
+    
+    it 'should redirect to show' do
+      do_get
+      response.should redirect_to(:action => :show)
+    end
+  end
 end
