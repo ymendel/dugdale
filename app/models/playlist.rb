@@ -44,4 +44,25 @@ class Playlist
     end
     @tracks << track
   end
+  
+  def start
+    return if playing?
+    system("#{RAILS_ROOT}/bin/source localhost 8000 #{path} genre url irc icq aim 0 160 #{full_path} source_#{path} &")
+  end
+  
+  def stop
+    return unless p = pid
+    Process.kill('TERM', p.to_i)
+  end
+  
+  def pid
+    ps_data = IO.read("| ps auxwww | grep source | grep -v grep | grep #{full_path}")
+    md = ps_data.match(/^\w*\s+(\d+)/)
+    return nil unless md
+    md[1]
+  end
+  
+  def playing?
+    pid ? true : false
+  end
 end

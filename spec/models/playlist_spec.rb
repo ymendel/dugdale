@@ -204,4 +204,143 @@ describe Playlist do
       end
     end
   end
+  
+  it 'should start itself' do
+    @playlist.should respond_to(:start)
+  end
+  
+  describe 'starting' do
+    it "should check if it's currently playing" do
+      @playlist.expects(:playing?)
+      @playlist.start
+    end
+    
+    describe 'when not currently playing' do
+      before :each do
+        @playlist.stubs(:playing?).returns(false)
+      end
+      
+      it "should shell out to the 'source' command" do
+        @playlist.expects(:system).with(regexp_matches(%r%^#{RAILS_ROOT}/bin/source%))
+        @playlist.start
+      end
+          
+      it 'should provide the full path' do
+        @playlist.expects(:system).with(regexp_matches(Regexp.new(Regexp.escape(@playlist.full_path))))
+        @playlist.start
+      end
+      
+      it 'should run the command in the background' do
+        @playlist.expects(:system).with(regexp_matches(/&$/))
+        @playlist.start
+      end
+    end
+    
+    describe 'when currently playing' do
+      before :each do
+        @playlist.stubs(:playing?).returns(true)
+      end
+      
+      it 'should not run any command' do
+        @playlist.expects(:sytem).never
+        @playlist.start
+      end
+    end
+  end
+  
+  it 'should stop itself' do
+    @playlist.should respond_to(:stop)
+  end
+  
+  describe 'stopping itself' do
+    it 'should get its PID' do
+      @playlist.expects(:pid)
+      @playlist.stop
+    end
+    
+    describe 'when there is a PID' do
+      before :each do
+        @playlist.stubs(:pid).returns('123')
+      end
+      
+      it 'should kill that process' do
+        Process.expects(:kill).with('TERM', 123)
+        @playlist.stop
+      end
+    end
+    
+    describe 'when there is no PID' do
+      before :each do
+        @playlist.stubs(:pid).returns(nil)
+      end
+      
+      it 'should do nothing' do
+        Process.expects(:kill).never
+        @playlist.stop
+      end
+    end
+  end
+  
+  it 'should get its PID' do
+    @playlist.should respond_to(:pid)
+  end
+  
+  describe 'getting its PID' do
+    it 'should look through the process list' do
+      IO.expects(:read).with(regexp_matches(%r%^\| ps.+grep source.+grep #{@playlist.full_path}%)).returns('')
+      @playlist.pid
+    end
+    
+    describe 'when the process is found' do
+      before :each do
+        @pid = '4123'
+        IO.stubs(:read).returns("username  #{@pid} ttys012    0:00.00 source localhost blah blah blah")
+      end
+      
+      it 'should return the PID' do
+        @playlist.pid.should == @pid
+      end
+    end
+    
+    describe 'when the process is not found' do
+      before :each do
+        IO.stubs(:read).returns('')
+      end
+      
+      it 'should return nil' do
+        @playlist.pid.should be_nil
+      end
+    end
+  end
+  
+  it "should tell if it's currently playing" do
+    @playlist.should respond_to(:playing?)
+  end
+  
+  describe "telling if it's currently playing" do
+    it 'should get its PID' do
+      @playlist.expects(:pid)
+      @playlist.playing?
+    end
+    
+    describe 'when there is a PID' do
+      before :each do
+        @playlist.stubs(:pid).returns('123')
+      end
+      
+      it 'should return true' do
+        @playlist.playing?.should == true
+      end
+    end
+    
+    describe 'when there is no PID' do
+      before :each do
+        @playlist.stubs(:pid).returns(nil)
+      end
+      
+      it 'should return false' do
+        @playlist.playing?.should == false
+      end
+    end
+  end
 end
