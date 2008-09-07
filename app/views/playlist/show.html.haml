@@ -4,4 +4,8 @@
 
 = link_to 'music index', '/music'
 %br
-= link_to 'clear playlist', '/playlist/clear'
+- if @playlist.playing?
+  = link_to 'stop playlist', '/playlist/stop'
+- else
+  = link_to 'start playlist', '/playlist/start'
+  = link_to 'clear playlist', '/playlist/clear'

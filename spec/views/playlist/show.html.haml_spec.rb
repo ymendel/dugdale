@@ -5,7 +5,7 @@ describe '/playlist/show' do
     @path = 'track_one'
     @track = stub('track', :path => @path)
     @track.stubs(:is_a?).with(Track).returns(true)
-    @playlist = stub('playlist', :tracks => [@track])
+    @playlist = stub('playlist', :tracks => [@track], :playing? => nil)
     assigns[:playlist] = @playlist
   end
   
@@ -82,8 +82,50 @@ describe '/playlist/show' do
     response.should have_tag('a[href=?]', '/music')
   end
   
-  it 'should link to clear the playlist' do
+  it 'should check if the playlist is currently playing' do
+    @playlist.expects(:playing?)
     do_render
-    response.should have_tag('a[href=?]', '/playlist/clear')
+  end
+  
+  describe 'when the playlist is currently playing' do
+    before :each do
+      @playlist.stubs(:playing?).returns(true)
+    end
+    
+    it 'should not link to start the playlist' do
+      do_render
+      response.should_not have_tag('a[href=?]', '/playlist/start')
+    end
+    
+    it 'should link to stop the playlist' do
+      do_render
+      response.should have_tag('a[href=?]', '/playlist/stop')
+    end
+    
+    it 'should not link to clear the playlist' do
+      do_render
+      response.should_not have_tag('a[href=?]', '/playlist/clear')
+    end
+  end
+  
+  describe 'when the playlist is not currently playing' do
+    before :each do
+      @playlist.stubs(:playing?).returns(false)
+    end
+    
+    it 'should link to start the playlist' do
+      do_render
+      response.should have_tag('a[href=?]', '/playlist/start')
+    end
+    
+    it 'should not link to stop the playlist' do
+      do_render
+      response.should_not have_tag('a[href=?]', '/playlist/stop')
+    end
+    
+    it 'should link to clear the playlist' do
+      do_render
+      response.should have_tag('a[href=?]', '/playlist/clear')
+    end
   end
 end
