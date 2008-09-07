@@ -3,3 +3,8 @@ A browser-based music browsing and request system will feed into streams (icecas
 
 Q: Why Dugdale?
 A: http://en.wikipedia.org/wiki/Richard_Louis_Dugdale
+
+This is presently using the litestream binaries 'litestream' and 'source' (included in /bin), and it assumes
+running litestream separately like so: 
+
+  bin/litestream 8000 127.0.0.1 8888 10 stream
