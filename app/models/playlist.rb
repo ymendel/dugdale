@@ -14,6 +14,7 @@ class Playlist
   end
   
   attr_reader :tracks
+  delegate :empty?, :to => :tracks
   
   def initialize
     load

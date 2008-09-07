@@ -343,4 +343,35 @@ describe Playlist do
       end
     end
   end
+  
+  it "should tell if it's empty" do
+    @playlist.should respond_to(:empty?)
+  end
+  
+  describe "telling if it's empty" do
+    before :each do
+      @tracks = []
+      @playlist.stubs(:tracks).returns(@tracks)
+    end
+    
+    describe 'when it has tracks' do
+      before :each do
+        @tracks.push('some track')
+      end
+      
+      it 'should return false' do
+        @playlist.empty?.should == false
+      end
+    end
+    
+    describe 'when it has tracks' do
+      before :each do
+        @tracks.clear
+      end
+      
+      it 'should return true' do
+        @playlist.empty?.should == true
+      end
+    end
+  end
 end
