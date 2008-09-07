@@ -5,7 +5,7 @@ describe '/playlist/show' do
     @path = 'track_one'
     @track = stub('track', :path => @path)
     @track.stubs(:is_a?).with(Track).returns(true)
-    @playlist = stub('playlist', :tracks => [@track], :playing? => nil)
+    @playlist = stub('playlist', :tracks => [@track], :playing? => nil, :empty? => false)
     assigns[:playlist] = @playlist
   end
   
@@ -126,6 +126,27 @@ describe '/playlist/show' do
     it 'should link to clear the playlist' do
       do_render
       response.should have_tag('a[href=?]', '/playlist/clear')
+    end
+    
+    describe 'and the playlist is empty' do
+      before :each do
+        @playlist.stubs(:empty?).returns(true)
+      end
+      
+      it 'should not link to start the playlist' do
+        do_render
+        response.should_not have_tag('a[href=?]', '/playlist/start')
+      end
+
+      it 'should not link to stop the playlist' do
+        do_render
+        response.should_not have_tag('a[href=?]', '/playlist/stop')
+      end
+
+      it 'should not link to clear the playlist' do
+        do_render
+        response.should_not have_tag('a[href=?]', '/playlist/clear')
+      end
     end
   end
 end
