@@ -100,4 +100,56 @@ describe PlaylistController do
       response.should redirect_to(:action => :show)
     end
   end
+  
+  describe 'GET /playlist/start' do
+    before :each do
+      @playlist = stub('playlist', :start => nil)
+      Playlist.stubs(:new).returns(@playlist)
+    end
+    
+    def do_get
+      get :start
+    end
+    
+    it 'should create a playlist instance' do
+      Playlist.expects(:new).returns(@playlist)
+      do_get
+    end
+    
+    it 'should start the playlist' do
+      @playlist.expects(:start)
+      do_get
+    end
+    
+    it 'should redirect to show' do
+      do_get
+      response.should redirect_to(:action => :show)
+    end
+  end
+  
+  describe 'GET /playlist/stop' do
+    before :each do
+      @playlist = stub('playlist', :stop => nil)
+      Playlist.stubs(:new).returns(@playlist)
+    end
+    
+    def do_get
+      get :stop
+    end
+    
+    it 'should create a playlist instance' do
+      Playlist.expects(:new).returns(@playlist)
+      do_get
+    end
+    
+    it 'should stop the playlist' do
+      @playlist.expects(:stop)
+      do_get
+    end
+    
+    it 'should redirect to show' do
+      do_get
+      response.should redirect_to(:action => :show)
+    end
+  end
 end

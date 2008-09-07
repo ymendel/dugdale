@@ -62,4 +62,20 @@ describe PlaylistController, 'routing' do
     pending 'figuring out what to do about the /s'
     route_for(:controller => 'playlist', :action => 'enqueue', :path => 'path/to/filename.mp3').should == '/playlist/enqueue/path/to/filename.mp3'
   end
+  
+  it "should build params :action => 'start', from GET /playlist/start" do
+    params_from(:get, '/playlist/start').should == { :controller => 'playlist', :action => 'start' }
+  end
+  
+  it "should map :action => 'start' to /playlist/start" do
+    route_for(:controller => 'playlist', :action => 'start').should == '/playlist/start'
+  end
+  
+  it "should build params :action => 'stop', from GET /playlist/stop" do
+    params_from(:get, '/playlist/stop').should == { :controller => 'playlist', :action => 'stop' }
+  end
+  
+  it "should map :action => 'stop' to /playlist/stop" do
+    route_for(:controller => 'playlist', :action => 'stop').should == '/playlist/stop'
+  end
 end

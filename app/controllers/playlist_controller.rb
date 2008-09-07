@@ -19,4 +19,16 @@ class PlaylistController < ApplicationController
     playlist.write
     redirect_to :action => :show
   end
+  
+  def start
+    playlist = Playlist.new
+    playlist.start
+    redirect_to :action => :show
+  end
+  
+  def stop
+    playlist = Playlist.new
+    playlist.stop
+    redirect_to :action => :show
+  end
 end
