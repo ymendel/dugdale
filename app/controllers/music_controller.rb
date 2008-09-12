@@ -8,6 +8,8 @@ class MusicController < ApplicationController
   end
   
   def browse
-    @tracks = Track.tree(params[:path])
+    list_method = request.xhr? ? :list : :tree
+    
+    @tracks = Track.send(list_method, params[:path])
   end
 end

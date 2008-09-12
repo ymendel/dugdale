@@ -74,5 +74,37 @@ describe MusicController do
       do_get
       response.should render_template('browse')
     end
-  end  
+  end
+  
+  describe 'GET /music/browse/path (xhr)' do
+    before :each do
+      @path = 'dir'
+      @list = stub('list')
+      Track.stubs(:list).returns(@list)
+    end
+    
+    def do_get
+      xhr :get, :browse, :path => @path
+    end
+    
+    it 'should be successful' do
+      do_get
+      response.should be_success
+    end
+    
+    it 'should get a list for the given path' do
+      Track.expects(:list).with(@path)
+      do_get
+    end
+    
+    it 'should make the list available to the view' do
+      do_get
+      assigns[:tracks].should == @list
+    end
+    
+    it 'should render the browse template' do
+      do_get
+      response.should render_template('browse')
+    end
+  end
 end
