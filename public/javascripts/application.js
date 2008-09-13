@@ -1,2 +1,11 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+$('ul#track_listing a[href*="browse"]').livequery('click', function(event) {
+  event.preventDefault();
+  var elem = $(this);
+  $.get(this.href,
+    function(html) {
+      html = $(html);
+      html.removeAttr('id');
+      elem.parent('li').after(html);
+    }
+  );
+});
