@@ -23,6 +23,11 @@ $('ul#track_listing a[href^="/music/show"]').livequery('click', function(event) 
  );
 });
 
+$('ul#track_listing a[href^="/playlist/enqueue"]').livequery('click', function(event) {
+  event.preventDefault();
+  $.get(this.href);
+});
+
 function removeOtherLists(elem) {
   var allLists  = $('ul#track_listing ul');
   var keepLists = elem.parents('ul');
