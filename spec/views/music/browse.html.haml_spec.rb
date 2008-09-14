@@ -48,6 +48,19 @@ describe '/music/index' do
       end
     end
     
+    it 'should link to enqueue the track' do
+      @track = stub('track', :path => '/path/to/file.mp3', :is_a? => false)
+      @track.stubs(:is_a?).with(Track).returns(true)
+      assigns[:tracks] = [@track]
+      do_render
+      response.should have_tag('a[href=?]', "/playlist/enqueue/#{@track.path}")
+    end
+    
+    it 'should not link to enqueue a directory' do
+      do_render
+      response.should_not have_tag('a[href^=?]', '/playlist/enqueue')
+    end
+    
     it 'should have an item for each track' do
       @tracks = ['track one', 'track two']
       display_names = []

@@ -1,1 +1,4 @@
-%li= link_to(display_name(track), view_link(track))
+%li
+  = link_to(display_name(track), view_link(track))
+  - if track.is_a?(Track)
+    = link_to '(enqueue)', "/playlist/enqueue/#{track.path}"
