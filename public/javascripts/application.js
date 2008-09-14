@@ -5,6 +5,7 @@ $('ul#track_listing a[href*="browse"]').livequery('click', function(event) {
     function(html) {
       html = $(html);
       html.removeAttr('id');
+      removeOtherLists(elem);
       elem.parent('li').after(html);
     }
   );
@@ -21,3 +22,10 @@ $('ul#track_listing a[href*="show"]').livequery('click', function(event) {
    }
  );
 });
+
+function removeOtherLists(elem) {
+  var allLists = $('ul#track_listing ul');
+  var keepLists = elem.parents('ul');
+  var toRemove = allLists.filter(function(i) { return $.inArray(allLists[i], keepLists) == -1; });
+  toRemove.remove();
+}
