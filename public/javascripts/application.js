@@ -1,4 +1,4 @@
-$('ul#track_listing a[href*="browse"]').livequery('click', function(event) {
+$('ul#track_listing a[href^="/music/browse"]').livequery('click', function(event) {
   event.preventDefault();
   var elem = $(this);
   $.get(this.href,
@@ -11,7 +11,7 @@ $('ul#track_listing a[href*="browse"]').livequery('click', function(event) {
   );
 });
 
-$('ul#track_listing a[href*="show"]').livequery('click', function(event) {
+$('ul#track_listing a[href^="/music/show"]').livequery('click', function(event) {
   event.preventDefault();
   var elem = $(this);
   $.get(this.href,
