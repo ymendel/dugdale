@@ -17,7 +17,12 @@ class PlaylistController < ApplicationController
     playlist = Playlist.new
     playlist << params[:path]
     playlist.write
-    redirect_to :action => :show
+    
+    if request.xhr?
+      render :text => ''
+    else
+      redirect_to :action => :show
+    end
   end
   
   def start

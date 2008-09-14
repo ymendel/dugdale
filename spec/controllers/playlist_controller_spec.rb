@@ -101,6 +101,40 @@ describe PlaylistController do
     end
   end
   
+  describe 'GET /playlist/enqueue/path (xhr)' do
+    before :each do
+      @playlist = stub('playlist', :<< => nil, :write => nil)
+      Playlist.stubs(:new).returns(@playlist)
+      @path = 'some_path'
+    end
+    
+    def do_get
+      xhr :get, :enqueue, :path => @path
+    end
+    
+    it 'should create a playlist instance' do
+      Playlist.expects(:new).returns(@playlist)
+      do_get
+    end
+    
+    it 'should enqueue the given path' do
+      @playlist.expects(:<<).with(@path)
+      do_get
+    end
+    
+    it 'should write the playlist' do
+      @playlist.expects(:write)
+      do_get
+    end
+    
+    it 'should render nothing' do
+      pending 'figuring out how to test this' do
+        controller.expects(:render).with(:text => '')
+        do_get
+      end
+    end
+  end
+  
   describe 'GET /playlist/start' do
     before :each do
       @playlist = stub('playlist', :start => nil)
