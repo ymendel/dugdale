@@ -19,4 +19,8 @@ Rails::Initializer.run do |config|
     :session_key => '_dugdale_session',
     :secret      => '6744a21bead584cf5e7ac92dd940a683fa238ff1429e1e811e6d0fee05a8ef0cca2a229ccd2ef167f6573d1d84cd424429fdb15c0a7de55737e1f94308c9bf8c'
   }
+  
+  config.load_paths += Dir["#{RAILS_ROOT}/vendor/gems/*"].map do |dir|
+    File.directory?(lib = "#{dir}/lib") ? lib : dir
+  end
 end
