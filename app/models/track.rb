@@ -7,7 +7,7 @@ class Track
     end
     
     def list(path = '')
-      Dir[File.join(root, path, '*')].collect do |elem|
+      Dir[File.join(root, path, '*')].sort_by { |n|  n.downcase }.collect do |elem|
         relative = elem.sub(%r%^#{Regexp.escape(Track.root)}/%, '')
         if File.file?(elem)
           new(relative)

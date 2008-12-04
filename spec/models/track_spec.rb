@@ -15,7 +15,6 @@ describe Track do
     end
     
     describe 'when listing music' do
-      
       it 'should accept a path' do
         lambda { Track.list('path') }.should_not raise_error(ArgumentError)
       end
@@ -39,6 +38,12 @@ describe Track do
         @listing = ['file', 'other file']
         Dir.stubs(:[]).returns(@listing)
         Track.list.should == @listing
+      end
+      
+      it 'should order the returned listing' do
+        @listing = ['file', 'File cap', 'other file', 'ABC', '123', 'bam']
+        Dir.stubs(:[]).returns(@listing)
+        Track.list.should == ['123', 'ABC', 'bam', 'file', 'File cap', 'other file']
       end
       
       it 'should remove the given path from the listings' do
